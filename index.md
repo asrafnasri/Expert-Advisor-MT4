@@ -1,37 +1,51 @@
-## Welcome to GitHub Pages
+//+-------------------------------------------------------------------------------+
+//| Experts Advisor.mq4 
+//| Copyright 2021 | asrafnasri, All rights reserved.
+//| https://asrafnasriofficial.blogspot.com
+//+-------------------------------------------------------------------------------+
+#property copyright "company name"
+#property link "Link to the company website"
+#property version "program version, maximum 31 characters"
+#property discription "the total lenght of all description can not exceed 511 characters including line feed"
+#property strict
+//+------------------------------------------------------------------+
+//| Expert add function
+//+------------------------------------------------------------------+
+datetime currentBar = 0;
+int logFileHandle = INVALID_HANDLE;
 
-You can use the [editor on GitHub](https://github.com/asrafnasri/Expert-Advisor-MT4/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+datetime lastActBuy = 0;
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+input bool DebugMode = false; //Write strategy actions to logs
+input bool WriteDebugLogToFile = false;
+//+------------------------------------------------------------------+
+//| Expert initialization function
+//+------------------------------------------------------------------+
+void OnInit()
+{
+   if(DebugMode && WriteDebugLogToFile)
+     logFileHandle = FileOpen(StringConcatenate(MathRand(), "-vsb.log"), FILE_WRITE|FILE_TXT|FILE_SHARE_READ);
+}
+//+------------------------------------------------------------------+
+//| Expert deinitialization function
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   if(logFileHandle != INVALID_HANDLE)
+     FileClose(logFileHandle);
+}
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/asrafnasri/Expert-Advisor-MT4/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+void WriteDebugLog(string logMessage)
+{
+   Print(logMessage);
+   if (logFileHandle != INVALID_HANDLE && WriteDebugLogToFile)
+     FileWriteString(logFileHandle, StringConcatenate(TimeToStr(TimeCurrent(),TIME_DATE|TIME_SECONDS), " " ,logMessage, "\r\n"));
+  }
+//+------------------------------------------------------------------+
+//| Expert tick function
+//+------------------------------------------------------------------+
+void OnTick()
+  {
+  	
+  }
+//+------------------------------------------------------------------+
